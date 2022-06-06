@@ -1,15 +1,17 @@
 package com.example.cpdemo.pool;
 
+import lombok.Data;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+@Data
 public class MyDataSource extends MyAbstractDataSource {
     private final List<ConnectProxy> idleList = new ArrayList<ConnectProxy>();
     private final List<ConnectProxy> activeList = new ArrayList<ConnectProxy>();
     private int MaxActiveConn = 15;
-    private int MaxIdleConn = 5;
+    private int MaxIdleConn = 15;
     //最大等待时间
     private int MaxPoolTimeToWait = 30000;
     public final Object monitor = new Object();
@@ -62,6 +64,9 @@ public class MyDataSource extends MyAbstractDataSource {
                 idleList.add(connectProxy);
                 System.out.println(connectProxy.hashCode()+"使用完毕并放入了空闲队列");
                 monitor.notify();
+            }else {
+                //TODO 空闲队列满，连接如何正确死亡？
+
             }
         }
     }

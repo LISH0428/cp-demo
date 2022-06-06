@@ -28,6 +28,7 @@ public class ConnectProxy implements MethodInterceptor {
     public <T> T  getProxy(Class clazz){
         Enhancer enhancer=new Enhancer();
         enhancer.setSuperclass(clazz);
+
         enhancer.setCallback(this);
         return (T)enhancer.create();
     }
@@ -37,9 +38,10 @@ public class ConnectProxy implements MethodInterceptor {
         String methodName = method.getName();
         //System.out.println("method======"+methodName);
         if ("close".equalsIgnoreCase(methodName)){
-            //把连接归还连接池
-            myDataSource.closeConnection(this);
-            return null;
+                //把连接归还连接池
+                myDataSource.closeConnection(this);
+                return null;
+
         }
         else{
             return methodProxy.invoke(connection, objects);
